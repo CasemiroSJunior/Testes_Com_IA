@@ -1,0 +1,26 @@
+name: Testes no github actions
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: muda pro repo
+        uses: actions/checkout@v4
+
+      - name: setup do node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instala dependencias
+        run: npm install
+
+      - name: Gera o prisma
+        run: npx prisma generate
+
+      - name: Roda Testes
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: npm run test
