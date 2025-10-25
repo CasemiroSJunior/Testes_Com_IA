@@ -1,0 +1,45 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "IA com Testes API",
+    "version": "1.0.0",
+    "description": "API de exemplo com endpoints de Users e AI. Documentação gerada a partir da implementação e testes."
+  },
+  "servers": [
+    { "url": "/api", "description": "Base API" }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "summary": "Lista usuários",
+        "responses": { "200": { "description": "Lista de usuários" } }
+      },
+      "post": {
+        "summary": "Cria usuário",
+        "requestBody": { "required": true },
+        "responses": { "201": { "description": "Usuário criado" }, "409": { "description": "ID já existe" } }
+      }
+    },
+    "/users/{id}": {
+      "get": { "summary": "Busca usuário por id", "parameters": [{"name":"id","in":"path","required":true,"schema":{"type":"integer"}}], "responses": { "200": { "description": "Usuário" }, "404": { "description": "Não encontrado" } } },
+      "put": { "summary": "Atualiza usuário", "parameters": [{"name":"id","in":"path","required":true,"schema":{"type":"integer"}}], "responses": { "200": { "description": "Usuário atualizado" }, "404": { "description": "Não encontrado" } } },
+      "delete": { "summary": "Deleta usuário", "parameters": [{"name":"id","in":"path","required":true,"schema":{"type":"integer"}}], "responses": { "200": { "description": "Deletado" }, "404": { "description": "Não encontrado" } } }
+    },
+    "/ai/generate": {
+      "post": {
+        "summary": "Gera conteúdo a partir de um prompt",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "prompt": { "type": "string" }, "userId": { "type": "integer" } }, "required": ["prompt"] } } } },
+        "responses": { "200": { "description": "Conteúdo gerado" }, "400": { "description": "Prompt é obrigatório" }, "500": { "description": "Erro interno" } }
+      }
+    },
+    "/ai/prompts": {
+      "get": { "summary": "Lista prompts gerados", "responses": { "200": { "description": "Lista de prompts" } } }
+    },
+    "/ai/prompts/{id}": {
+      "get": { "summary": "Busca prompt por id", "parameters": [{"name":"id","in":"path","required":true,"schema":{"type":"integer"}}], "responses": { "200": { "description": "Prompt" }, "404": { "description": "Não encontrado" } } }
+    },
+    "/ai/user/{userId}/prompts": {
+      "get": { "summary": "Lista prompts de um usuário", "parameters": [{"name":"userId","in":"path","required":true,"schema":{"type":"integer"}}], "responses": { "200": { "description": "Lista de prompts" } } }
+    }
+  }
+}
