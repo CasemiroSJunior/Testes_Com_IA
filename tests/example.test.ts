@@ -59,17 +59,26 @@ describe("Testes de exemplo", () => {
 
   it(" Teste com dados mockados ", () => {
     const utils = require("../utils/examplesFunctions");
-    const spy = jest.spyOn(utils, "Soma").mockReturnValue(3); // Nesse caso, estamos falando que o valor da função será 3
-    expect(Soma(1, 3)).toBe(3); //Aqui comprova que veio 3
+    // Espiona a função Soma do módulo utils e forçar retorno 3
+    const spy = jest.spyOn(utils, "Soma").mockReturnValue(3);
 
-    spy.mockRestore(); //Limpamos os dados mockados
+    // Quando a função for chamada via import original (Soma) ela está ligada ao mesmo módulo,
+    // portanto chamar utils.Soma garante que o spy seja usado.
+    expect(utils.Soma(1, 3)).toBe(3);
 
-    expect(Soma(1, 1)).toBe(2);
+    // Restaurar implementação original
+    spy.mockRestore();
 
-    utils.mockImplementation((a: number, b: number) => a - b); //Aqui mockamos a função Soma para que ela subtraia
-    utils(Soma(5, 2)); //Aqui a função soma na verdade está subtraindo
-    expect(Soma(5, 2)).toBe(3);
+    expect(utils.Soma(1, 1)).toBe(2);
 
-    utils.mockRestore();
+    // Agora alterar a implementação para subtrair usando mockImplementation no spy novamente
+    const spy2 = jest.spyOn(utils, "Soma").mockImplementation((...args: unknown[]) => {
+      const [a, b] = args as [number, number];
+      return a - b;
+    });  // Nesse caso, como estamos alterando a implementação do metodo, passamos o que ele espera e o que ele irá retornar
+    expect(utils.Soma(5, 2)).toBe(3); // 5 - 2 tem que ser 3
+
+    // Restaurar implementação original
+    spy2.mockRestore();
   });
 });

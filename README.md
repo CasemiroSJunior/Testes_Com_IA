@@ -11,7 +11,7 @@ Quickstart
 2. Gere o client do Prisma e rode a migração inicial (usa SQLite):
 
    npx prisma generate
-   npx prisma migrate dev --name init
+   npx prisma migrate dev
 
 3. Pegue uma key do GEMINI e coloque conforme exememplo em .env.example 
 
