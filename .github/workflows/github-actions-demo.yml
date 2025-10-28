@@ -20,6 +20,9 @@ jobs:
       - name: Gera o prisma
         run: npx prisma generate
 
+      - name: Roda migrações
+        run: npx prisma migrate dev
+
       - name: Roda Testes
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
