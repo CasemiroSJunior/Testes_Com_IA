@@ -4,10 +4,7 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      
+
     steps:
       - name: muda pro repo
         uses: actions/checkout@v4
@@ -21,10 +18,15 @@ jobs:
         run: npm install
 
       - name: Gera o prisma
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma generate
 
       - name: Roda migrações
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma migrate dev
+        
 
       - name: Roda Testes
         env:
